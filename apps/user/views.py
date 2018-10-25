@@ -70,3 +70,55 @@ def dashboard(request):
         "users": users,
     }
     return render(request, 'user/dashboard.html', context)
+
+def profile(request, id):
+    user = User.objects.get(id=id)
+    messages = Message.objects.filter(user=user)
+    context = {
+        "user": user,
+        "message": messages,
+    }
+    return render(request, 'user/profile.html', context)
+
+def delete_user(request, id):
+    item = User.objects.get(id=id)
+    item.delete()
+    messages.success(request, 'User deleted successfully!')
+    return redirect('/dashboard')
+
+def process_message(request, id):
+    errors = Message.objects.validate_message(request.POST)
+    if len(errors):
+        for tag, error in errors.items():
+            messages.error(request, error)
+        return redirect('/')
+    else:
+        user_to = User.objects.get(id=id)
+        user = User.objects.get(id=request.session['id'])
+        body = request.POST['body']
+        Message.objects.create(user_to=user_to, user=user, body=body)
+        messages.success(request, 'Successfully added message')
+        return redirect('/dashboard')
+
+def process_comment(request, message_id):
+    errors = Comment.objects.validate_comment(request.POST)
+    if len(errors):
+        for tag, error in errors.items():
+            messages.error(request, error)
+        return redirect('/')
+    else:
+        message = Message.objects.get(id=message_id)
+        user = User.objects.get(id=request.session['id'])
+        body = request.POST['body']
+        Comment.objects.create(message=message, user=user, body=body)
+        messages.success(request, 'Successfully added comment')
+        return redirect('/dashboard')
+
+def comment(request, message_id):
+    message = Message.objects.get(id=message_id)
+    comments = Comment.objects.filter(message=message)
+    context = {
+        "message": message,
+        "comments": comments
+    }
+    return render(request, 'user/comment.html', context)

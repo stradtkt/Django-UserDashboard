@@ -62,6 +62,7 @@ class MessageManager(models.Manager):
         return errors
 
 class Message(models.Model):
+    user_to = models.ForeignKey(User, related_name="to", on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User, related_name="messenger", on_delete=models.DO_NOTHING)
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -71,8 +72,8 @@ class Message(models.Model):
 class CommentManager(models.Manager):
     def validate_comment(self, postData):
         errors = {}
-        if len(postData['body']) < 10:
-            errors['body'] = "You need to have at least 10 characters in your message"
+        if len(postData['body']) < 3:
+            errors['body'] = "You need to have at least 3 characters in your message"
         return errors
 
 class Comment(models.Model):

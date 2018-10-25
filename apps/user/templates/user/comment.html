@@ -1,0 +1,86 @@
+{% extends 'user/layout.html' %}
+{% block title %} {{user.first_name}}'s Profile | {{block.super}} {% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 offset-3">
+                {% if messages %}
+                <ul class="messages mt-5 mb-5">
+                    {% for message in messages %}
+                        <li {% if message.tags == "error" %} class="bg-danger text-white" 
+                        {% elif message.tags == "success" %} class="bg-success text-white"
+                        {% endif %}>{{message}}</li><br>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-3">
+                <div class="card p-3 mt-3 mb-3">
+                    <div class="card-header text-center">
+                        <h3>{{user.first_name}} {{user.last_name}}</h3>
+                    </div>
+                    <div class="card-body text-center">
+                        <p>User ID: {{user.id}}</p>
+                        <p>Email: {{user.email}}</p>
+                        <p>Username {{user.username}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 offset-2">
+                    <div class="card p-5 mt-3 mb-3">
+                        <div class="card-header text-center">
+                            <p class="lead">Leave a message for {{user.first_name}}</p>
+                        </div>
+                        <div class="card-body text-center">
+                            <form action="{{user.id}}/process_message" method="POST" class="text-center">
+                                {% csrf_token %}
+                                <textarea name="body" class="form-control" cols="30" rows="10"></textarea>
+                                <input type="submit" value="Send Message" class="btn btn-success">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 offset-2">
+                        <div class="card p-5 mt-3 mb-3">
+                            <div class="card-header text-center">
+                                <p class="lead">Messages</p>
+                            </div>
+                            <div class="card-body text-center">
+                                {% if message %}
+                                    {% for msg in message %}
+                                        <div class="messages text-center">
+                                            <p>{{msg.body}}</p>
+                                            <small>{{msg.user.first_name}}</small>
+                                            <small>{{msg.created_at}}</small>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}
