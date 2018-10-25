@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from .models import *
+from .forms import *
 import bcrypt
 
 
@@ -22,17 +23,17 @@ def login(request):
             return redirect('/dashboard')
         else:
             messages.error(request, "Incorrect email and/or password")
-            return redirect('/')
+            return redirect('/login-page')
     else:
         messages.error(request, "User does not exist")
-    return redirect('/')
+    return redirect('/login-page')
 
 def register(request):
     errors = User.objects.validate_user(request.POST)
     if len(errors):
         for tag, error in errors.items():
             messages.error(request, error)
-        return redirect('/')
+        return redirect('/register-page')
     else:
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
@@ -41,15 +42,31 @@ def register(request):
         password = request.POST['password']
         hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         User.objects.create(first_name=first_name, last_name=last_name, username=username, email=email, password=hashed_pw)
-        return redirect('/')
+        return redirect('/login-page')
 
 def logout(request):
     request.session.clear()
     return redirect('/')
 
 def register_page(request):
-    return render(request, 'user/register-page.html')
+    form = RegisterForm()
+    context = {
+        "form": form
+    }
+    return render(request, 'user/register-page.html', context)
 
 def login_page(request):
-    return render(request, 'user/login-page.html')
+    form = LoginForm()
+    context = {
+        "form": form
+    }
+    return render(request, 'user/login-page.html', context)
 
+def dashboard(request):
+    user = User.objects.get(id=request.session['id'])
+    users = User.objects.all()
+    context = {
+        "user": user,
+        "users": users,
+    }
+    return render(request, 'user/dashboard.html', context)

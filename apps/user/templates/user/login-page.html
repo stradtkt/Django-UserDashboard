@@ -1,0 +1,43 @@
+{% extends 'user/layout.html' %}
+{% block title %} Login | {{block.super}} {% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 offset-3">
+                {% if messages %}
+                <ul class="messages mt-5 mb-5">
+                    {% for message in messages %}
+                        <li {% if message.tags == "error" %} class="bg-danger text-white" 
+                        {% elif message.tags == "success" %} class="bg-success text-white"
+                        {% endif %}>{{message}}</li><br>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <div class="card p-3 mt-5 mb-5">
+                    <div class="card-header text-center">
+                        <h3>Login</h3>
+                    </div>
+                    <div class="card-body">
+                        <form action="login" method="POST" class="text-center">
+                            {% csrf_token %}
+                            {{form.as_p}}
+                            <input type="submit" value="Login" class="btn btn-info">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

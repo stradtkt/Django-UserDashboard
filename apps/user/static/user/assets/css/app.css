@@ -1,6 +1,25 @@
 body {
-    background: #525451;
+    background: linear-gradient(120deg, #939096, #e6e4e3);
+    height: 100%;
 }
 .navbar {
-    background: #99a0b0;
+    background: #e6e4e3;
+}
+
+a.navbar-brand,
+.navbar-nav li.nav-item a.nav-link {
+    color: #525451 !important;
+    font-weight: 700;
+    font-size: 14px !important;
+}
+form p > label {
+    display: none !important;
+}
+input[placeholder="Confirm Your Password"],
+input[placeholder="Your Password"],
+input[placeholder="Your Username"],
+input[placeholder="Your Email"],
+input[placeholder="Last Name"],
+input[placeholder="First Name"] {
+    text-align: center;
 }
