@@ -9,8 +9,6 @@ urlpatterns = [
     url(r'^login-page$', views.login_page),
     url(r'^dashboard$', views.dashboard),
     url(r'^dashboard/profile/(?P<id>\d+)$', views.profile),
-    url(r'^dashboard/profile/(?P<id>\d+)/comment/(?P<message_id>\d+)$', views.comment),
     url(r'^dashboard/profile/(?P<id>\d+)/process_message$', views.process_message),
-    url(r'^dashboard/profile/(?P<id>\d+)/comment/(?P<message_id>\d+)/process_comment$', views.process_comment),
     url(r'^dashboard/delete-user/(?P<id>\d+)$', views.delete_user),
 ]

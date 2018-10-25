@@ -99,26 +99,3 @@ def process_message(request, id):
         Message.objects.create(user_to=user_to, user=user, body=body)
         messages.success(request, 'Successfully added message')
         return redirect('/dashboard')
-
-def process_comment(request, message_id):
-    errors = Comment.objects.validate_comment(request.POST)
-    if len(errors):
-        for tag, error in errors.items():
-            messages.error(request, error)
-        return redirect('/')
-    else:
-        message = Message.objects.get(id=message_id)
-        user = User.objects.get(id=request.session['id'])
-        body = request.POST['body']
-        Comment.objects.create(message=message, user=user, body=body)
-        messages.success(request, 'Successfully added comment')
-        return redirect('/dashboard')
-
-def comment(request, message_id):
-    message = Message.objects.get(id=message_id)
-    comments = Comment.objects.filter(message=message)
-    context = {
-        "message": message,
-        "comments": comments
-    }
-    return render(request, 'user/comment.html', context)

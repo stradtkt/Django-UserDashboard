@@ -68,18 +68,3 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = MessageManager()
-
-class CommentManager(models.Manager):
-    def validate_comment(self, postData):
-        errors = {}
-        if len(postData['body']) < 3:
-            errors['body'] = "You need to have at least 3 characters in your message"
-        return errors
-
-class Comment(models.Model):
-    user = models.ForeignKey(User, related_name="commentor", on_delete=models.DO_NOTHING)
-    message = models.ForeignKey(Message, related_name="message", on_delete=models.DO_NOTHING)
-    body = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    objects = CommentManager()
